@@ -23,8 +23,7 @@ const options = {
         }
         btnStartEl.disabled = false;        
         dateSelected = selectedDates[0];
-        // Якщо розкоментувати строку нижче, то зверни увагу на останню секунду на табло...
-        // dateSelected = Date.now() + 5000;        
+        // Якщо обрати дату та час так, щоб таймер дійшов до нуля, до дивись нижче...   
     },
 };
 const datePicker = flatpickr("#datetime-picker", options);
@@ -62,18 +61,20 @@ function decrementSeconds() {
         return;
     }
     const {days, hours, minutes, seconds} = convertMs(dateSelected - Date.now());    
-    document.querySelector('[data-days]').textContent = days;
+    document.querySelector('[data-days]').textContent = addLeadingZero(days);
     document.querySelector('[data-hours]').textContent = addLeadingZero(hours);
     document.querySelector('[data-minutes]').textContent = addLeadingZero(minutes);
     document.querySelector('[data-seconds]').textContent = addLeadingZero(seconds); 
-    // В консоль виводиться остання секунда, тобто 0, 
-    // а в елемент ДОМ прописується тільки після закриття Alert!?! Але в коді раніше стоїть... 
+    // В консоль виводиться остання секунда, тобто 0,все ОК
+    // а в елемент ДОМ (поле секунд) прописується тільки після закриття Alert!?! 
+    // Але в коді раніше стоїть зміна контенту... 
     // console.log(seconds);
     if (!days && !hours && !minutes && !seconds) {
         clearInterval(timerId);
         // Якщо розкоментувати Alert,  нуль секунд з'явиться на таймері тільки після закриття Alert
         // alert('Timer stopped!');
-        Notify.info('Timer stopped!');          
+        Notify.info('Timer stopped!');  
+        datePickerEl.disabled = false;        
     }            
 }
 
